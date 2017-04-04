@@ -42,7 +42,11 @@ public class AdminPage {
         for (int i = 0; i < size; i++) {
             WebElement h = driver.findElement(parentselector);
             List<WebElement> webElements = h.findElements(childselector);
-            webElements.get(i).click();
+            WebElement childMenuItem = webElements.get(i);
+            String header = childMenuItem.getText();
+            childMenuItem.click();
+            validateHeader(header);
+
         }
 
     }
@@ -55,13 +59,14 @@ public class AdminPage {
 
     }
 
-    private boolean validateHeader(String header) {
-
-        WebElement h = driver.findElement(By.cssSelector("h1[style=margin-top: 0px;]"));
+    private void validateHeader(String header) {
+        System.out.println("child menu item (expected): "+ header);
+        WebElement h = driver.findElement(By.cssSelector("h1"));
         String title = h.getText();
-        return header.equals(title);
+        System.out.println("page header (actual): "+ title);
+        if(header!=null && header.contains(title)) System.out.println("Page title correct!");
+        else System.err.println("Page title incorrect!");
 
-        //return false;
     }
 
 
@@ -84,12 +89,8 @@ public class AdminPage {
             WebElement container = driver.findElement(By.cssSelector("ul[class=list-vertical]"));
             List<WebElement> pl = container.findElements(By.cssSelector("li[id=app-]"));
             WebElement parentMenuItem = pl.get(i);
-            //String header = parentMenuItem.getText();
-            //  header.equals(title);
-
             parentMenuItem.click();
             wait.withTimeout(5000, TimeUnit.MILLISECONDS);
-          //  Assert.assertTrue("Header incorrect", validateHeader(header));
 
             if (checkeElemetPresence(childContainerSelector)) {
 
